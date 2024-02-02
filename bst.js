@@ -6,6 +6,7 @@ const binarySearch = require('./bin-search')
 class Node {
   constructor(data) {
     this.data = data;
+    this.parent = null;
     this.left = null;
     this.right = null;
   }
@@ -21,13 +22,14 @@ class Tree {
     return mergeSort(array).filter((number, index, arr) => arr.indexOf(number) === index); 
   }
 
-  buildTree(array, start = 0, end = array.length-1) {
+  buildTree(array, start = 0, end = array.length-1, parentNode = null) {
     if(start > end) return null;
     
     const mid = Math.floor((start + end) / 2);
     const root = new Node(array[mid]);
-    root.left = this.buildTree(array, start, mid-1);
-    root.right = this.buildTree(array, mid+1, end);
+    root.parent = parentNode;
+    root.left = this.buildTree(array, start, mid-1, root);
+    root.right = this.buildTree(array, mid+1, end, root);
 
     return root;
   }
