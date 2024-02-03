@@ -35,6 +35,7 @@ class Tree {
   }
 
   insert(value, root = this.root) {
+    // root is null
     if (!root) return this.root = new Node(value);
 
     if (value < root.data) {
@@ -54,6 +55,90 @@ class Tree {
       }
       this.insert(value, root.right);
     }
+  }
+
+  delete(value) {
+    const node = this.find(value);
+    if (!node) return null; // node not found
+    
+    const parent = node.parent;
+
+    // Node is a leaf
+    if (!node.left && !node.right) {
+      if (!parent) {
+        this.root = null;
+        return;
+      }
+      if (parent.left === node) parent.left = null;
+      if (parent.right === node) parent.right = null;
+      return;
+    }
+
+    // Node has at least one child
+    if (!node.left || !node.right) {
+      const child = node.left || node.right;
+      if (!parent) {
+        this.root = child;
+      } else if (parent.left === node) {
+        parent.left = child;
+      } else {
+      parent.right = child;
+      }
+      child.parent = parent;
+      return;
+    }
+
+
+    const successor = this.findMinNth(node.right);
+    if (successorParent) {
+      if (successorParent.left === successor) {
+        successorParent.left = successor.right;
+      } else {
+        successorParent.right = successor.right;
+      }
+    }
+
+    if (!parent) {
+      this.root = successor;
+    } else if (parent.left === node) {
+      parent.left = successor;
+    } else {
+      parent.right = successor;
+    }
+
+    successor.parent = node.parent;
+    successor.left = node.left;
+    successor.right = node.right;
+  
+    if (node.left) node.left.parent = successor;
+    if (node.right) node.right.parent = successor;
+  }
+
+  findMaxNth(root) {
+    if (!root.right) return root;
+    return this.findMaxNth(root.right);
+  }
+
+  findMinNth(root) {
+    if (!root.left) return root;
+    return this.findMinNth(root.left);
+  }
+
+  findSuccessor(value, root) {
+    if (!root.left) return root;
+    if (value < root.data) return this.findSuccessor(value, root.left)
+    if (value > root.data) return this.findSuccessor(value, root.right)
+    return null;
+  }
+  
+  find(value, root = this.root) {
+    if (!root) {
+      return null;
+    }
+
+    if (root.data === value) return root;
+    if (value < root.data) return this.find(value, root.left);
+    if (value > root.data) return this.find(value, root.right);
   }
 
   inOrderTreeWalk(root = this.root) {
