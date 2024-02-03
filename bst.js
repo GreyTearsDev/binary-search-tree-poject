@@ -33,6 +33,37 @@ class Tree {
 
     return root;
   }
+
+  insert(value, root = this.root) {
+    if (!root) return this.root = new Node(value);
+
+    if (value < root.data) {
+      if (!root.left) {
+        const newNode = new Node(value);
+        root.left = newNode;
+        newNode.parent = root;
+        return;
+      } 
+      this.insert(value, root.left);
+    } else if (value > root.data) {
+      if (!root.right) {
+        const newNode = new Node(value);
+        root.right = newNode;
+        newNode.parent = root;
+        return;
+      }
+      this.insert(value, root.right);
+    }
+  }
+
+  inOrderTreeWalk(root = this.root) {
+    if (root !== null) {
+      this.inOrderTreeWalk(root.left);
+      console.log(root.data);
+      this.inOrderTreeWalk(root.right);
+    }
+  }
+ 
 }
 
 /*==============TESTS==============*/
@@ -48,5 +79,7 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 
 const test = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-
 prettyPrint(test.root);
+test.insert(12);
+prettyPrint(test.root);
+test.inOrderTreeWalk();
