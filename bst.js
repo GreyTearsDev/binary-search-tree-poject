@@ -188,23 +188,11 @@ class Tree {
     if (value > root.data) return this.find(value, root.right);
   }
 
-  BFS(cb, queue, array = []) {
-    if (queue.isEmpty()) return array;
-      const node = queue.dequeue();
-
-      if (node.left) queue.enqueue(node.left);
-      if (node.right) queue.enqueue(node.right);
-
-     if (!cb) {    
-      array.push(node);
-      this.BFS(null, queue, array)
-     } else {
-      array.push(cb(node));
-      this.BFS(null, queue, array)
-    } 
-    
-  }
-  
+  /**
+   * Performs level order traversal of a binary tree iteratively.
+   * @param {function} [cb=null] - The callback function to apply to each node's value.
+   * @returns {Array} An array containing the values of the nodes visited in level order.
+   */
   levelOrderIterative(cb = null) {
     const root = this.root;
 
@@ -213,10 +201,10 @@ class Tree {
     const queue = new Queue();
     queue.enqueue(root);
 
-    while(!queue.isEmpty()) {
+    while (!queue.isEmpty()) {
       const currentNode = queue.dequeue();
-      nodesValues.push(currentNode.data);      
-      
+      nodesValues.push(currentNode.data);
+
       if (currentNode.left) queue.enqueue(currentNode.left);
       if (currentNode.right) queue.enqueue(currentNode.right);
     }
@@ -224,24 +212,91 @@ class Tree {
     if (!cb) return nodesValues;
     return nodesValues.map((value) => cb(value));
   }
-  
-  levelOrderRecursive(cb = null, root = this.root, queue = new Queue(), nodesValues = [] ) {
+
+  /**
+   * Performs level order traversal of a binary tree recursively.
+   * @param {function} [cb=null] - The callback function to apply to each node's value.
+   * @param {Node} [root=this.root] - The current node being processed in the traversal.
+   * @param {Queue} [queue=new Queue()] - The queue storing nodes to be processed.
+   * @param {Array} [nodesValues=[]] - An array to store the values of nodes visited in level order.
+   * @returns {Array} An array containing the values of the nodes visited in level order.
+   */
+  levelOrderRecursive(
+    cb = null,
+    root = this.root,
+    queue = new Queue(),
+    nodesValues = []
+  ) {
     if (queue.isEmpty()) {
       if (!cb) return nodesValues;
       return nodesValues.map((value) => cb(value));
     }
-    
+
     if (root) {
       queue.enqueue(root);
     }
-    
+
     const currentNode = queue.dequeue();
-    nodesValues.push(currentNode.data);      
-    
+    nodesValues.push(currentNode.data);
+
     if (currentNode.left) queue.enqueue(currentNode.left);
     if (currentNode.right) queue.enqueue(currentNode.right);
-    
+
     return this.levelOrderRecursive(cb, queue.peek(), queue, nodesValues);
+  }
+
+  /**
+   * Performs a pre-order depth-first traversal of the binary tree, invoking the callback on each node.
+   * @param {function} [cb=null] - Optional callback function to be invoked on each node.
+   * @param {Node} [root=this.root] - The root node of the binary tree.
+   * @param {Array} [nodesValues=[]] - Array to store the values of the nodes traversed.
+   * @returns {Array} - Array of node values if no callback is provided, otherwise an array of values returned by the callback.
+   */
+  preOrderDFS(cb = null, root = this.root, nodesValues = []) {
+    if (!root) return [];
+
+    nodesValues.push(root.data);
+    this.preOrderDFS(cb, root.left, nodesValues);
+    this.preOrderDFS(cb, root.right, nodesValues);
+
+    if (!cb) return nodesValues;
+    return nodesValues.map((value) => cb(value));
+  }
+
+  /**
+   * Performs an in-order depth-first traversal of the binary tree, invoking the callback on each node.
+   * @param {function} [cb=null] - Optional callback function to be invoked on each node.
+   * @param {Node} [root=this.root] - The root node of the binary tree.
+   * @param {Array} [nodesValues=[]] - Array to store the values of the nodes traversed.
+   * @returns {Array} - Array of node values if no callback is provided, otherwise an array of values returned by the callback.
+   */
+  inOrderDFS(cb = null, root = this.root, nodesValues = []) {
+    if (!root) return [];
+
+    this.inOrderDFS(cb, root.left, nodesValues);
+    nodesValues.push(root.data);
+    this.inOrderDFS(cb, root.right, nodesValues);
+
+    if (!cb) return nodesValues;
+    return nodesValues.map((value) => cb(value));
+  }
+
+  /**
+   * Performs a post-order depth-first traversal of the binary tree, invoking the callback on each node.
+   * @param {function} cb - Callback function to be invoked on each node.
+   * @param {Node} [root=this.root] - The root node of the binary tree.
+   * @param {Array} [nodesValues=[]] - Array to store the values of the nodes traversed.
+   * @returns {Array} - Array of node values if no callback is provided, otherwise an array of values returned by the callback.
+   */
+  postOrderDFS(cb, root = this.root, nodesValues = []) {
+    if (!root) return [];
+
+    this.postOrderDFS(cb, root.left, nodesValues);
+    this.postOrderDFS(cb, root.right, nodesValues);
+    nodesValues.push(root.data);
+
+    if (!cb) return nodesValues;
+    return nodesValues.map((value) => cb(value));
   }
 }
 
