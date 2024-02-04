@@ -1,8 +1,7 @@
 "use strict";
 
 const mergeSort = require("./merge-sort");
-const binarySearch = require("./bin-search");
-
+const Queue = require("./queue");
 /**
  * Represents a node in a binary tree.
  */
@@ -187,6 +186,62 @@ class Tree {
     if (root.data === value) return root;
     if (value < root.data) return this.find(value, root.left);
     if (value > root.data) return this.find(value, root.right);
+  }
+
+  BFS(cb, queue, array = []) {
+    if (queue.isEmpty()) return array;
+      const node = queue.dequeue();
+
+      if (node.left) queue.enqueue(node.left);
+      if (node.right) queue.enqueue(node.right);
+
+     if (!cb) {    
+      array.push(node);
+      this.BFS(null, queue, array)
+     } else {
+      array.push(cb(node));
+      this.BFS(null, queue, array)
+    } 
+    
+  }
+  
+  levelOrderIterative(cb = null) {
+    const root = this.root;
+
+    if (!root) return;
+    const nodesValues = [];
+    const queue = new Queue();
+    queue.enqueue(root);
+
+    while(!queue.isEmpty()) {
+      const currentNode = queue.dequeue();
+      nodesValues.push(currentNode.data);      
+      
+      if (currentNode.left) queue.enqueue(currentNode.left);
+      if (currentNode.right) queue.enqueue(currentNode.right);
+    }
+
+    if (!cb) return nodesValues;
+    return nodesValues.map((value) => cb(value));
+  }
+  
+  levelOrderRecursive(cb = null, root = this.root, queue = new Queue(), nodesValues = [] ) {
+    if (queue.isEmpty()) {
+      if (!cb) return nodesValues;
+      return nodesValues.map((value) => cb(value));
+    }
+    
+    if (root) {
+      queue.enqueue(root);
+    }
+    
+    const currentNode = queue.dequeue();
+    nodesValues.push(currentNode.data);      
+    
+    if (currentNode.left) queue.enqueue(currentNode.left);
+    if (currentNode.right) queue.enqueue(currentNode.right);
+    
+    return this.levelOrderRecursive(cb, queue.peek(), queue, nodesValues);
   }
 }
 
