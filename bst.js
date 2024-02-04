@@ -298,6 +298,16 @@ class Tree {
     if (!cb) return nodesValues;
     return nodesValues.map((value) => cb(value));
   }
+
+/**
+ * Finds the height of the tree rooted at the given node.
+ * @param {Node} root - The root node of the tree.
+ * @returns {number} - The height of the tree.
+ */
+  height(root) {
+    if (!root) return -1; // the root node is a leaf
+    return Math.max(this.height(root.left), this.height(root.right)) + 1;
+  } 
 }
 
 /*==============TESTS==============*/
@@ -320,3 +330,4 @@ test.delete(4);
 prettyPrint(test.root);
 test.delete(8);
 prettyPrint(test.root);
+console.log(test.height(test.root));
