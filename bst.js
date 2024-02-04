@@ -308,6 +308,17 @@ class Tree {
     if (!root) return -1; // the root node is a leaf
     return Math.max(this.height(root.left), this.height(root.right)) + 1;
   } 
+
+/**
+  Finds the depth (distance of the path to the root) of a given node.
+  * @param {Node} root - The root of the tree.
+  * @param {number} - The number of edges traversed
+  * @returns {number} depthCount - The depth of the tree
+  */
+  depth(root, depthCount = 0) {
+    if (root === this.root || !root) return depthCount;
+    return this.depth(root.parent, depthCount + 1);
+  }
 }
 
 /*==============TESTS==============*/
