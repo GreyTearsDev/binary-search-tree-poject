@@ -102,7 +102,7 @@ class Tree {
     const parent = node.parent;
 
     // Node is a leaf
-    if (!node.left && !node.right) {
+    if (!node.left && !node.right)) {
       if (!parent) {
         this.root = null;
         return;
@@ -303,7 +303,7 @@ class Tree {
  * @returns {number} - The height of the tree.
  */
   height(root) {
-    if (!root) return -1; // the root node is a leaf
+    if (!root) return -1; 
     return Math.max(this.height(root.left), this.height(root.right)) + 1;
   } 
 
@@ -319,12 +319,25 @@ class Tree {
   }
 
 /**
- * Checks if the binary tree is balanced.
- * @returns {boolean} True if the tree is balanced, false otherwise.
+ * Checks if the binary tree rooted at the given node is balanced.
+ * A binary tree is balanced if the heights of the left and right subtrees
+ * of every node differ by at most 1.
+ * @param {Node} root - The root node of the binary tree to check.
+ * @returns {boolean} - True if the tree is balanced, false otherwise.
  */
-  isBalanced(root = this.root) {
+  isBalanced(root) {
+    if (!root) return 0;
 
-    return (this.height(root.left) - this.height(root.right) < 2);
+    const leftHeight = isBalanced(root.left);
+    if (leftHeight === -1) return -1;
+    const rightHeight = isBalanced(root.right);
+    if (rightHeight === -1) return -1;
+    
+    if (Math.abs(leftHeight - rightHeight) <= 1) {
+      return Math.max(leftHeight, rightHeight) + 1; 
+    } else {
+      return -1;
+    }
   }
 }
 
