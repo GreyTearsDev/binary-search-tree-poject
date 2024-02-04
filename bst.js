@@ -97,12 +97,13 @@ class Tree {
    */
   delete(value) {
     const node = this.find(value);
+
     if (!node) return null; // node not found
 
     const parent = node.parent;
 
     // Node is a leaf
-    if (!node.left && !node.right)) {
+    if (!node.left && !node.right) {
       if (!parent) {
         this.root = null;
         return;
@@ -319,18 +320,16 @@ class Tree {
   }
 
 /**
- * Checks if the binary tree rooted at the given node is balanced.
- * A binary tree is balanced if the heights of the left and right subtrees
- * of every node differ by at most 1.
- * @param {Node} root - The root node of the binary tree to check.
- * @returns {boolean} - True if the tree is balanced, false otherwise.
+ * Calculates the height difference between the left and right subtrees of a given node.
+ * @param {Node} [root=this.root] - The root node of the subtree to check balance for.
+ * @returns {number} Returns -1 if the tree is unbalanced, otherwise returns the height of the tree.
  */
-  isBalanced(root) {
+  checkBalance(root = this.root) {
     if (!root) return 0;
 
-    const leftHeight = isBalanced(root.left);
+    const leftHeight = this.checkBalance(root.left);
     if (leftHeight === -1) return -1;
-    const rightHeight = isBalanced(root.right);
+    const rightHeight = this.checkBalance(root.right);
     if (rightHeight === -1) return -1;
     
     if (Math.abs(leftHeight - rightHeight) <= 1) {
@@ -338,6 +337,20 @@ class Tree {
     } else {
       return -1;
     }
+  }
+
+/**
+ * Checks if the binary tree is balanced.
+ * @returns {boolean} Returns true if the tree is balanced, otherwise returns false.
+ */
+  isBalanced() {
+   return this.checkBalance() !== -1;
+  }
+
+  rebalance(root) {
+    if (!root) return;
+    if (this.isBalanced(root)) return;
+    this.root = this.buildTree(this.inOrderDFS(root));
   }
 }
 
@@ -359,6 +372,8 @@ test.insert(12);
 prettyPrint(test.root);
 test.delete(4);
 prettyPrint(test.root);
+test.insert(0);
 test.delete(8);
 prettyPrint(test.root);
 console.log(test.height(test.root));
+console.log(test.isBalanced())
