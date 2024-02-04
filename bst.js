@@ -232,9 +232,7 @@ class Tree {
       return nodesValues.map((value) => cb(value));
     }
 
-    if (root) {
-      queue.enqueue(root);
-    }
+    if (root) queue.enqueue(root);
 
     const currentNode = queue.dequeue();
     nodesValues.push(currentNode.data);
@@ -310,14 +308,23 @@ class Tree {
   } 
 
 /**
-  Finds the depth (distance of the path to the root) of a given node.
-  * @param {Node} root - The root of the tree.
-  * @param {number} - The number of edges traversed
-  * @returns {number} depthCount - The depth of the tree
-  */
+ * Calculates the depth of a node in the binary tree.
+ * @param {Node} root - The current node whose depth is being calculated.
+ * @param {number} [depthCount=0] - The depth count of the current node (default is 0).
+ * @returns {number} The depth of the node.
+ */
   depth(root, depthCount = 0) {
     if (root === this.root || !root) return depthCount;
     return this.depth(root.parent, depthCount + 1);
+  }
+
+/**
+ * Checks if the binary tree is balanced.
+ * @returns {boolean} True if the tree is balanced, false otherwise.
+ */
+  isBalanced(root = this.root) {
+
+    return (this.height(root.left) - this.height(root.right) < 2);
   }
 }
 
