@@ -269,7 +269,6 @@ class Tree {
     this.postOrderDFS(cb, root.left, nodesValues);
     this.postOrderDFS(cb, root.right, nodesValues);
     nodesValues.push(root.data);
-
     
     if (root === this.root) {
       if (!cb) return nodesValues;
