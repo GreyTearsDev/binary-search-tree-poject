@@ -225,14 +225,16 @@ class Tree {
    * @returns {Array} - Array of node values if no callback is provided, otherwise an array of values returned by the callback.
    */
   preOrderDFS(cb = null, root = this.root, nodesValues = []) {
-    if (!root) return [];
+    if (!root) return;
 
     nodesValues.push(root.data);
-    this.preOrderDFS(cb, root.left, nodesValues);
-    this.preOrderDFS(cb, root.right, nodesValues);
+    if (root.left) this.preOrderDFS(cb, root.left, nodesValues);
+    if (root.right) this.preOrderDFS(cb, root.right, nodesValues);
 
-    if (!cb) return nodesValues;
-    return nodesValues.map((value) => cb(value));
+    if (root === this.root) {
+      if (!cb) return nodesValues;
+      return nodesValues.map((value) => cb(value));
+    }
   }
 
   /**
