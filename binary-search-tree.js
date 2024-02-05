@@ -270,8 +270,11 @@ class Tree {
     this.postOrderDFS(cb, root.right, nodesValues);
     nodesValues.push(root.data);
 
-    if (!cb) return nodesValues;
-    return nodesValues.map((value) => cb(value));
+    
+    if (root === this.root) {
+      if (!cb) return nodesValues;
+      return nodesValues.map((value) => cb(value));
+    }
   }
 
   /**
