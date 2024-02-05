@@ -277,6 +277,7 @@ class Tree {
     this.inOrderDFS(cb, root.right, nodesValues);
 
     if (!cb) return nodesValues;
+    
     return nodesValues.map((value) => cb(value));
   }
 
@@ -347,10 +348,16 @@ class Tree {
    return this.checkBalance() !== -1;
   }
 
-  rebalance(root) {
-    if (!root) return;
-    if (this.isBalanced(root)) return;
-    this.root = this.buildTree(this.inOrderDFS(root));
+/**
+ * Rebalances the AVL tree if it is not balanced.
+ * This method checks if the tree is balanced using the isBalanced method,
+ * and if not, it rebuilds the tree by performing an in-order depth-first traversal
+ * to get the sorted array of node values and then reconstructing the tree from that sorted array.
+ */
+  rebalance() {
+    if (this.isBalanced()) return;
+    const sortedTree = this.inOrderDFS();
+    this.root = this.buildTree(sortedTree);
   }
 }
 
@@ -373,6 +380,10 @@ prettyPrint(test.root);
 test.delete(4);
 prettyPrint(test.root);
 test.insert(0);
+test.insert(444);
+test.insert(555);
+test.insert(666);
+test.insert(999);
 test.delete(8);
 prettyPrint(test.root);
 console.log(test.height(test.root));
