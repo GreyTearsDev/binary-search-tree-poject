@@ -40,7 +40,7 @@ class LinkedList {
      * Points to the last node in the list.
      * @type {Node}
      */
-    this.tail = null;
+    this.listTail = null;
 
     /**
      * Stores the number of nodes in the list.
@@ -64,10 +64,10 @@ class LinkedList {
 
     if (this.listSize === 0) {
       this.head = newNode;
-      this.tail = newNode;
+      this.listTail = newNode;
     } else {
-      this.tail.next = newNode;
-      this.tail = newNode;
+      this.listTail.next = newNode;
+      this.listTail = newNode;
     }
 
     this.currentNode = newNode;
@@ -84,7 +84,7 @@ class LinkedList {
     if (this.listSize !== 0) {
       newNode.next = this.head;
     } else {
-      this.tail = newNode;
+      this.listTail = newNode;
     }
     this.head = newNode;
     this.currentNode = newNode;
@@ -113,7 +113,7 @@ class LinkedList {
    */
 
   tail() {
-    return this.tail;
+    return this.listTail;
   }
 
   /**
@@ -133,31 +133,33 @@ class LinkedList {
     return currentNode;
   }
 
-  /**
-   * Removes and returns the last node from the linked list.
-   * @returns {boolean} True if a node was successfully removed, false if the list is empty.
-   */
+/**
+ * Removes and returns the last node from the linked list.
+ * @returns {Node|boolean} The removed node if a node was successfully removed, or false if the list is empty.
+ */
   pop() {
-    if (this.listSize === 0) return false;
+   if (this.listSize === 0) return false;
 
     let currentNode = this.head;
+    let poppedNode;
 
     if (this.listSize === 1) {
-      this.head = null;
-      this.tail = null;
-      this.listSize--;
-      return true;
+        poppedNode = currentNode;
+        this.head = null;
+        this.listTail = null;
+    } else {
+        while (currentNode.next.next !== null) {
+            currentNode = currentNode.next;
+        }
+        poppedNode = currentNode.next;
+        currentNode.next = null;
+        this.listTail = currentNode;
     }
 
-    while (currentNode.next.next !== null) {
-      currentNode = currentNode.next;
-    }
-
-    currentNode.next = null;
-    this.tail = currentNode;
     this.listSize--;
-    return true;
+    return poppedNode;
   }
+  
 
   /**
    * Checks if the linked list contains a node with the given value.
@@ -254,9 +256,9 @@ class LinkedList {
     let targetNode = this.at(index);
     let theNodeBefore = this.at(index - 1);
 
-    if (targetNode === this.tail) {
+    if (targetNode === this.listTail) {
       theNodeBefore.next = null;
-      this.tail = targetNode;
+      this.listTail = targetNode;
       this.listSize--;
       return true;
     }
