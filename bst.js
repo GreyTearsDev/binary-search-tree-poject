@@ -321,31 +321,30 @@ class Tree {
   }
 
 /**
- * Calculates the height difference between the left and right subtrees of a given node.
- * @param {Node} [root=this.root] - The root node of the subtree to check balance for.
- * @returns {number} Returns -1 if the tree is unbalanced, otherwise returns the height of the tree.
- */
-  checkBalance(root = this.root) {
-    if (!root) return 0;
-
-    const leftHeight = this.checkBalance(root.left);
-    if (leftHeight === -1) return -1;
-    const rightHeight = this.checkBalance(root.right);
-    if (rightHeight === -1) return -1;
-    
-    if (Math.abs(leftHeight - rightHeight) <= 1) {
-      return Math.max(leftHeight, rightHeight) + 1; 
-    } else {
-      return -1;
-    }
-  }
-
-/**
  * Checks if the binary tree is balanced.
  * @returns {boolean} Returns true if the tree is balanced, otherwise returns false.
  */
   isBalanced() {
-   return this.checkBalance() !== -1;
+/**
+   * Helper function to check the balance of a subtree rooted at the given node.
+   * @param {Node} [root=this.root] - The root node of the subtree to check balance for.
+   * @returns {number} Returns -1 if the tree is unbalanced, otherwise returns the height of the tree.
+   */
+    const checkBalance = (root = this.root) => {
+      if (!root) return 0;
+
+      const leftHeight = this.checkBalance(root.left);
+      if (leftHeight === -1) return -1;
+      const rightHeight = this.checkBalance(root.right);
+      if (rightHeight === -1) return -1;
+    
+      if (Math.abs(leftHeight - rightHeight) <= 1) {
+        return Math.max(leftHeight, rightHeight) + 1; 
+      } else {
+        return -1;
+      }
+    };
+   return checkBalance() !== -1;
   }
 
 /**
