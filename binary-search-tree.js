@@ -251,9 +251,10 @@ class Tree {
     nodesValues.push(root.data);
     this.inOrderDFS(cb, root.right, nodesValues);
 
-    if (!cb) return nodesValues;
-
-    return nodesValues.map((value) => cb(value));
+    if (root === this.root) {
+      if (!cb) return nodesValues;
+      return nodesValues.map((value) => cb(value));
+    }
   }
 
   /**
