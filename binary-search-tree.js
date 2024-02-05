@@ -326,7 +326,7 @@ class Tree {
   }
 
   /**
-   * Rebalances the AVL tree if it is not balanced.
+   * Rebalances the tree if it is not balanced.
    * This method checks if the tree is balanced using the isBalanced method,
    * and if not, it rebuilds the tree by performing an in-order depth-first traversal
    * to get the sorted array of node values and then reconstructing the tree from that sorted array.
